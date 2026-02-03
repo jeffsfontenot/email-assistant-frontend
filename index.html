@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1e3a8a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Email Assistant">
+  
+  <title>Email Assistant</title>
+  
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/logo192.png">
+  
+  <!-- Distinctive fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    
+    #root {
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+    }
+    
+    /* Loading screen */
+    .app-loader {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #1e3a8a 0%, #7c3aed 50%, #f97316 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    
+    .app-loader.fade-out {
+      animation: fadeOut 0.5s ease-out forwards;
+    }
+    
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+    
+    .loader-content {
+      text-align: center;
+      color: white;
+    }
+    
+    .loader-logo {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.05); opacity: 0.9; }
+    }
+    
+    .loader-text {
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-loader" id="appLoader">
+    <div class="loader-content">
+      <div class="loader-logo">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+              <stop offset="50%" style="stop-color:#a78bfa;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#fb923c;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <path d="M100 40 L160 80 L160 140 L100 180 L40 140 L40 80 Z" 
+                fill="url(#logoGrad)" opacity="0.2"/>
+          <path d="M70 90 L130 70 L145 120 L70 90 Z" 
+                fill="url(#logoGrad)" stroke="white" stroke-width="3"/>
+          <circle cx="155" cy="65" r="3" fill="#fbbf24"/>
+          <circle cx="165" cy="55" r="4" fill="#60a5fa"/>
+          <circle cx="170" cy="70" r="2.5" fill="#fb923c"/>
+        </svg>
+      </div>
+      <div class="loader-text">Email Assistant</div>
+    </div>
+  </div>
+  
+  <div id="root"></div>
+  
+  <script>
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('Service Worker registered'))
+          .catch(err => console.log('Service Worker registration failed:', err));
+      });
+    }
+    
+    // Hide loader when app loads
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('appLoader').classList.add('fade-out');
+      }, 500);
+    });
+  </script>
+</body>
+</html>
